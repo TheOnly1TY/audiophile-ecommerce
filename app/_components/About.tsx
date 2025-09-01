@@ -1,8 +1,8 @@
-import Image from "next/image";
+// import Image from "next/image";
 
-import AboutImage_Desktop from "@/public/shared/desktop/image-best-gear.jpg";
-import AboutImage_Tablet from "@/public/shared/tablet/image-best-gear.jpg";
-import AboutImage_Mobile from "@/public/shared/mobile/image-best-gear.jpg";
+// import AboutImage_Desktop from "@/public/shared/desktop/image-best-gear.jpg";
+// import AboutImage_Tablet from "@/public/shared/tablet/image-best-gear.jpg";
+// import AboutImage_Mobile from "@/public/shared/mobile/image-best-gear.jpg";
 
 export default function About() {
   return (
@@ -23,12 +23,18 @@ export default function About() {
         </p>
       </div>
       <picture>
-        <source media="(max-width: 767px)" srcSet={AboutImage_Mobile.src} />
-        <source media="(max-width: 1023px)" srcSet={AboutImage_Tablet.src} />
+        <source
+          media="(max-width: 767px)"
+          srcSet="/shared/mobile/image-best-gear.jpg"
+        />
+        <source
+          media="(max-width: 1023px)"
+          srcSet="/shared/tablet/image-best-gear.jpg"
+        />
 
-        <Image
-          src={AboutImage_Desktop}
-          className="rounded-lg md:w-full"
+        <img
+          src="/shared/desktop/image-best-gear.jpg"
+          className="rounded-lg w-full"
           alt="about"
         />
       </picture>

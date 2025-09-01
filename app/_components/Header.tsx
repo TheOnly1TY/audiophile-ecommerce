@@ -1,23 +1,27 @@
 "use client";
 import Image from "next/image";
-
-// import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import Logo from "@/app/_ui/Logo";
+import Cart_Icon from "@/public/shared/desktop/icon-cart.svg";
 import Navigation from "@/app/_components/Navigation";
+import { useCart } from "@/app/_contexts/CartContext";
 import MenuList from "@/app/_components/MenuList";
 import Cart from "@/app/_components/Cart";
-import Cart_Icon from "@/public/shared/desktop/icon-cart.svg";
 import Overlay from "../_ui/Overlay";
+import Logo from "@/app/_ui/Logo";
 
 export default function Header() {
-  const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
-
-  // WILL MOVE TO CONTEXT SOON
-  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  // const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
-
+  const pathName = usePathname();
+  const {
+    isCartOpen,
+    handleToggleCart,
+    isNavOpen,
+    setIsNavOpen,
+    addedProducts,
+  } = useCart();
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -33,9 +37,14 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <>
-      <header className={`fixed w-full z-20 ${isScrolled ? "bg-black" : ""}`}>
+      <header
+        className={`fixed w-full z-20 ${pathName !== "/" && "bg-black"}  ${
+          isScrolled ? "bg-black" : ""
+        } lg:px-6`}
+      >
         <div
           className={`flex ${
             isScrolled ? "" : "border-[#979797] border-b"
@@ -88,10 +97,15 @@ export default function Header() {
 
           {/* CART ICON */}
           <div
-            className="cursor-pointer z-10"
-            onClick={() => setIsCartOpen((prev) => !prev)}
+            className="relative cursor-pointer z-10"
+            onClick={handleToggleCart}
           >
             <Image src={Cart_Icon} width={23.33} height={20} alt="cart" />
+            {addedProducts.length !== 0 && (
+              <div className="absolute -top-3 -right-3 flex justify-center items-center min-w-6 h-6 text-sm font-bold text-white  bg-brand-orange rounded-full">
+                {addedProducts.length}
+              </div>
+            )}
           </div>
         </div>
 
@@ -100,11 +114,8 @@ export default function Header() {
         {/* RENDER COMPONENT IS STILL TEMPORARY DUE TO ANIMATION THAT WOULD BE ADDED  */}
         {isCartOpen && (
           <div>
-            <Cart onCartOpen={setIsCartOpen} />
-            <Overlay
-              isHidden={false}
-              action={() => setIsCartOpen((prev) => !prev)}
-            />
+            <Cart />
+            <Overlay isHidden={false} action={handleToggleCart} />
           </div>
         )}
       </header>
@@ -112,12 +123,7 @@ export default function Header() {
       {/* MOBILE NAVIGATION */}
       <div className="fixed w-full z-10">
         <MenuList isNavOpen={isNavOpen} />
-        {isNavOpen && (
-          <Overlay
-            isHidden={true}
-            action={() => setIsNavOpen((prev) => !prev)}
-          />
-        )}
+        {isNavOpen && <Overlay isHidden={true} action={handleToggleCart} />}
       </div>
     </>
   );

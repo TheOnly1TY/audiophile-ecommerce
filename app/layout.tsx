@@ -3,6 +3,10 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import Header from "@/app/_components/Header";
 import Footer from "@/app/_components/Footer";
+import { CartProvider } from "@/app/_contexts/CartContext";
+import { Slide, ToastContainer } from "react-toastify";
+import { FormProviderCustom } from "./_contexts/FormContext";
+import Modal from "./_components/Modal";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -11,7 +15,10 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Audiophile E-Commerce",
+  title: {
+    template: "%s - Audiophile",
+    default: "Welcome - Audiophile",
+  },
   description:
     "Audiophile is a premium e-commerce destination for high-end headphones, speakers, and earphones. Discover expertly curated audio products, detailed reviews, and seamless shopping designed for passionate music lovers seeking the best in sound quality and design.",
 };
@@ -26,10 +33,30 @@ export default function RootLayout({
       <body
         className={`${manrope.className} antialiased min-h-screen flex flex-col relative`}
       >
-        <Header />
-        <main>{children}</main>
+        <CartProvider>
+          <FormProviderCustom>
+            <Header />
+            <main className="relative flex-grow">
+              {children}
 
-        <Footer />
+              <ToastContainer
+                position="top-left"
+                autoClose={2000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable={false}
+                pauseOnHover={false}
+                theme="light"
+                transition={Slide}
+              />
+              <Modal />
+            </main>
+            <Footer />
+          </FormProviderCustom>
+        </CartProvider>
       </body>
     </html>
   );

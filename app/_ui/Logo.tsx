@@ -1,14 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/public/shared/desktop/logo.svg";
 
-export default function Logo({ hidden }: { hidden: string }) {
+export default function Logo({ hidden }: { hidden?: string }) {
   return (
-    <div
+    <Link
+      href="/"
       className={`${hidden === "tablet" && "md:hidden lg:block"} ${
         hidden === "mobile/desktop" && "hidden md:block lg:hidden"
       }`}
     >
       <Image src={logo} width={143} height={25} alt="logo" />
-    </div>
+    </Link>
   );
 }

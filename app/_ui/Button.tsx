@@ -2,13 +2,14 @@ import { ButtonProps } from "@/app/types/Types";
 
 export default function Button({
   children,
+  width = "40",
   variant = "primary",
   action,
 }: ButtonProps) {
   return (
     <button
       onClick={action}
-      className={`w-40 h-12 
+      className={`w-${width} h-12 w-40
         ${
           variant === "primary" &&
           " bg-brand-orange text-white hover:bg-brand-peach"
