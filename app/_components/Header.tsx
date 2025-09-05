@@ -86,18 +86,14 @@ export default function Header() {
                   />
                 </button>
               ) : (
-                <motion.button
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={firstControls}
-                  className="cursor-pointer"
-                >
+                <button className="cursor-pointer">
                   <Image
                     src="/shared/mobile/icon-hamburger.svg"
                     width={24}
                     height={24}
                     alt="open menu button"
                   />
-                </motion.button>
+                </button>
               )}
             </div>
             {/*Tablet-only logo (Hidden on mobile & Tablet) required by design layout */}

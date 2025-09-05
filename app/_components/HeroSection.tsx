@@ -46,7 +46,7 @@ export default function HeroSection() {
         transition={{ duration: 1.5, delay: 2, ease: "easeOut" }}
         className="relative w-full h-full max-w-[1160px] mx-auto
       flex justify-center lg:justify-between items-center
-      px-6 lg:px-0 mt-10 md:mt-0 lg:mt-20 z-10"
+      px-6 lg:px-0 mt-10 md:mt-0 lg:mt-20 lg:z-10"
       >
         <div className="lg:mx-6">
           <div

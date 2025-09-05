@@ -33,7 +33,7 @@ export default function Home() {
         </motion.div>
       </section>
       <HomepageProductList />
-      <div className="px-6">
+      <div className="lg:px-6">
         <About />
       </div>
     </div>
