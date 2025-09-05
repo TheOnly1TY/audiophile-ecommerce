@@ -1,11 +1,9 @@
-import { useCheckoutForm } from "../_contexts/FormContext";
+import { useCheckoutForm } from "@/app/_contexts/FormContext";
 
 export default function EMoneyForm({ isEmptyCart }: { isEmptyCart: boolean }) {
   const {
     register,
-
     watch,
-
     formState: { errors },
   } = useCheckoutForm();
 
@@ -25,7 +23,6 @@ export default function EMoneyForm({ isEmptyCart }: { isEmptyCart: boolean }) {
         </label>
         <input
           type="number"
-          name="eMoneyNumber"
           {...register("eMoneyNumber", {
             required: "This field is required",
           })}
@@ -51,7 +48,6 @@ export default function EMoneyForm({ isEmptyCart }: { isEmptyCart: boolean }) {
         </label>
         <input
           type="number"
-          name="eMoneyPin"
           id="eMoneyPin"
           {...register("eMoneyPin", {
             required: "This field is required",

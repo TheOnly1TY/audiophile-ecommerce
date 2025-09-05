@@ -3,17 +3,21 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import Cart_Icon from "@/public/shared/desktop/icon-cart.svg";
+import Overlay from "@/app/_ui/Overlay";
+import Logo from "@/app/_ui/Logo";
 import Navigation from "@/app/_components/Navigation";
 import { useCart } from "@/app/_contexts/CartContext";
 import MenuList from "@/app/_components/MenuList";
 import Cart from "@/app/_components/Cart";
-import Overlay from "../_ui/Overlay";
-import Logo from "@/app/_ui/Logo";
+import { useAnimation, motion } from "framer-motion";
 
 export default function Header() {
-  // const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
+  const firstControls = useAnimation();
+  const secondControls = useAnimation();
+  const thirdControls = useAnimation();
+
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
   const pathName = usePathname();
   const {
     isCartOpen,
@@ -38,6 +42,26 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    async function sequence() {
+      await firstControls.start({
+        opacity: 1,
+        x: 0,
+        transition: { duration: 0.4, ease: "easeOut" },
+      });
+      await secondControls.start({
+        opacity: 1,
+        x: 0,
+      });
+      await thirdControls.start({
+        opacity: 1,
+        x: 0,
+        transition: { duration: 0.4 },
+      });
+    }
+    sequence();
+  }, [firstControls, secondControls, thirdControls]);
+
   return (
     <>
       <header
@@ -53,60 +77,62 @@ export default function Header() {
           <div className="flex items-center gap-6 lg:hidden cursor-pointer">
             <div onClick={() => setIsNavOpen((prev) => !prev)}>
               {isNavOpen ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide text-white lucide-x-icon lucide-x"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
+                <button className="cursor-pointer">
+                  <Image
+                    src="/shared/mobile/icon-cancel.svg"
+                    width={24}
+                    height={24}
+                    alt="close menu button"
+                  />
+                </button>
               ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide text-white lucide-menu-icon lucide-menu"
+                <motion.button
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={firstControls}
+                  className="cursor-pointer"
                 >
-                  <path d="M4 12h16" />
-                  <path d="M4 18h16" />
-                  <path d="M4 6h16" />
-                </svg>
+                  <Image
+                    src="/shared/mobile/icon-hamburger.svg"
+                    width={24}
+                    height={24}
+                    alt="open menu button"
+                  />
+                </motion.button>
               )}
             </div>
             {/*Tablet-only logo (Hidden on mobile & Tablet) required by design layout */}
-            <Logo hidden={"mobile/desktop"} />
+            <Logo
+              hidden={"mobile/desktop"}
+              priority={false}
+              animation={secondControls}
+            />
           </div>
           {/* Mobile & Desktop logo (hidden on tablet) separate component for a responsive design  */}
-          <Logo hidden={"tablet"} />
-
-          <Navigation isHidden={true} />
+          <Logo hidden={"tablet"} priority={true} animation={firstControls} />
+          <Navigation isHidden={true} animation={secondControls} />
 
           {/* CART ICON */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={thirdControls}
             className="relative cursor-pointer z-10"
             onClick={handleToggleCart}
           >
-            <Image src={Cart_Icon} width={23.33} height={20} alt="cart" />
+            <button className="cursor-pointer">
+              <Image
+                src="/shared/desktop/icon-cart.svg"
+                width={23.33}
+                height={20}
+                className="w-auto h-auto"
+                alt="toggle cart button"
+              />
+            </button>
             {addedProducts.length !== 0 && (
               <div className="absolute -top-3 -right-3 flex justify-center items-center min-w-6 h-6 text-sm font-bold text-white  bg-brand-orange rounded-full">
                 {addedProducts.length}
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* CART MODAL */}
@@ -122,8 +148,8 @@ export default function Header() {
 
       {/* MOBILE NAVIGATION */}
       <div className="fixed w-full z-10">
-        <MenuList isNavOpen={isNavOpen} />
-        {isNavOpen && <Overlay isHidden={true} action={handleToggleCart} />}
+        <MenuList />
+        {isNavOpen && <Overlay isHidden={true} />}
       </div>
     </>
   );

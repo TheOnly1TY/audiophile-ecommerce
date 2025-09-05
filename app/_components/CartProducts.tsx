@@ -1,8 +1,10 @@
-import Image from "next/image";
-import Counter from "../_ui/Counter";
-import Button from "../_ui/Button";
-import { useCart } from "../_contexts/CartContext";
 import Link from "next/link";
+import Image from "next/image";
+
+import Counter from "@/app/_ui/Counter";
+import Button from "@/app/_ui/Button";
+import { useCart } from "@/app/_contexts/CartContext";
+import formatProductName from "@/app/_libs/helpers";
 
 export default function CartProducts() {
   const {
@@ -21,7 +23,7 @@ export default function CartProducts() {
           cart ({addedProducts.length})
         </h4>
         <button
-          className="text-[0.9375rem] text-black/50 underline leading-[25px] font-medium cursor-pointer transition-all duration-300 hover:text-brand-orange"
+          className="text-[0.9375rem] text-gray-700 underline leading-[25px] font-medium cursor-pointer transition-all duration-300 hover:text-brand-orange"
           onClick={handleDeleteProducts}
         >
           Remove all
@@ -40,9 +42,9 @@ export default function CartProducts() {
               />
               <div>
                 <h3 className="text-[0.9735rem] leading-[25px] font-bold uppercase">
-                  {product.name}
+                  {formatProductName(product.name)}
                 </h3>
-                <p className="text-sm leading-[25px] text-black/50 font-bold">
+                <p className="text-sm leading-[25px] text-gray-700 font-bold">
                   ${product.price.toLocaleString()}
                 </p>
               </div>
@@ -58,7 +60,7 @@ export default function CartProducts() {
         ))}
       </ul>
       <div className="flex justify-between items-center mb-6">
-        <h4 className="text-[0.9375rem] text-black/50 leading-[25px] font-medium">
+        <h4 className="text-[0.9375rem] text-gray-700 leading-[25px] font-medium">
           Total
         </h4>
         <p className="text-lg font-bold">

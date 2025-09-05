@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { Slide, ToastContainer } from "react-toastify";
 import "./globals.css";
+
+import { CartProvider } from "@/app/_contexts/CartContext";
+import { FormProviderCustom } from "@/app/_contexts/FormContext";
 import Header from "@/app/_components/Header";
 import Footer from "@/app/_components/Footer";
-import { CartProvider } from "@/app/_contexts/CartContext";
-import { Slide, ToastContainer } from "react-toastify";
-import { FormProviderCustom } from "./_contexts/FormContext";
-import Modal from "./_components/Modal";
+import Modal from "@/app/_components/Modal";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -36,7 +37,7 @@ export default function RootLayout({
         <CartProvider>
           <FormProviderCustom>
             <Header />
-            <main className="relative flex-grow">
+            <main className="relative flex-grow overflow-hidden">
               {children}
 
               <ToastContainer

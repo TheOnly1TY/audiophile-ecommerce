@@ -1,19 +1,34 @@
-// import Image from "next/image";
+"use client";
 
-// import AboutImage_Desktop from "@/public/shared/desktop/image-best-gear.jpg";
-// import AboutImage_Tablet from "@/public/shared/tablet/image-best-gear.jpg";
-// import AboutImage_Mobile from "@/public/shared/mobile/image-best-gear.jpg";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import AboutImage from "@/app/_components/AboutImage";
 
 export default function About() {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
   return (
-    <section className="flex flex-col-reverse gap-10 md:gap-16 lg:flex-row justify-between items-center max-w-[1110px] lg:h-[36.75rem] mx-auto px-6 md:mx-10 lg:mx-auto md:px-0">
+    <motion.section
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      transition={{ duration: 0.75, ease: "easeIn" }}
+      className="flex flex-col-reverse gap-10 md:gap-16 lg:flex-row justify-between items-center max-w-[1110px] lg:h-[36.75rem] mx-auto px-6 md:mx-10 lg:mx-auto md:px-0"
+    >
       <div className="flex flex-col text-center lg:text-left gap-y-8 md:max-w-[573px] lg:max-w-[445px]">
         <h2 className="text-[1.75rem] md:text-[2.5rem] leading-[2.75rem] tracking-[1px] md:tracking-[1.43px] uppercase font-bold">
           Bringing you the best{" "}
           <span className="text-brand-orange">audio </span>
           gear
         </h2>
-        <p className="text-[0.9375rem] leading-[25px] text-black/50 font-medium">
+        <p className="text-[0.9375rem] leading-[25px] text-gray-700 font-medium">
           Located at the heart of New York City, Audiophile is the premier store
           for high end headphones, earphones, speakers, and audio accessories.
           We have a large showroom and luxury demonstration rooms available for
@@ -22,22 +37,7 @@ export default function About() {
           best place to buy your portable audio equipment.
         </p>
       </div>
-      <picture>
-        <source
-          media="(max-width: 767px)"
-          srcSet="/shared/mobile/image-best-gear.jpg"
-        />
-        <source
-          media="(max-width: 1023px)"
-          srcSet="/shared/tablet/image-best-gear.jpg"
-        />
-
-        <img
-          src="/shared/desktop/image-best-gear.jpg"
-          className="rounded-lg w-full"
-          alt="about"
-        />
-      </picture>
-    </section>
+      <AboutImage />
+    </motion.section>
   );
 }

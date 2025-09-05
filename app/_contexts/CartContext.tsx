@@ -1,13 +1,13 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import formatProductName, { toastProperties } from "@/app/_libs/helpers";
+import { SHIPPING_FEE } from "@/app/_constants/pricing";
 import {
   AddedProductsType,
   CartContextType,
   cartProductDataProps,
-} from "@/app/types/Types";
-import { toast } from "react-toastify";
-import { toastProperties } from "../_libs/helpers";
-import { SHIPPING_FEE } from "../_constants/pricing";
+} from "@/app/_types/Types";
 
 const CartContext = createContext<CartContextType | null>(null);
 
@@ -15,6 +15,17 @@ function CartProvider({ children }: { children: React.ReactNode }) {
   const [addedProducts, setAddedProducts] = useState<AddedProductsType[]>([]);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("cartItems");
+    if (stored) {
+      setAddedProducts(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(addedProducts));
+  }, [addedProducts]);
 
   const TotalProductPrice = addedProducts.reduce(
     (acc, cur) => cur.price * cur.quantity + acc,
@@ -45,12 +56,13 @@ function CartProvider({ children }: { children: React.ReactNode }) {
             : product
         )
       );
+
       // 2. Reset State
       setCount(1);
 
       // 3. Notify
       toast.success(
-        `Product ${existingProducts.name.split(" ")[0]} quantity updated!`,
+        `Product ${formatProductName(existingProducts.name)} quantity updated!`,
         toastProperties
       );
     } else {
@@ -65,7 +77,7 @@ function CartProvider({ children }: { children: React.ReactNode }) {
 
       // 3. Notify
       toast.success(
-        `Product ${cartProductData.name.split(" ")[0]} is Added!`,
+        `Product ${formatProductName(cartProductData.name)} is Added!`,
         toastProperties
       );
     }
@@ -79,7 +91,7 @@ function CartProvider({ children }: { children: React.ReactNode }) {
         prevProducts.filter((product) => product.id !== id)
       );
       toast.success(
-        `Product ${getProduct.name.split(" ")[0]} deleted`,
+        `Product ${formatProductName(getProduct.name)} deleted`,
         toastProperties
       );
     } else {

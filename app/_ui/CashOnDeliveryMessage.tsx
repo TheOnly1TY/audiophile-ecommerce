@@ -9,7 +9,7 @@ export default function CashOnDeliveryMessage() {
         height={48}
         alt="cash on delivery"
       />
-      <p className="text-[0.9365rem] leading-[25px] text-black/50 font-medium">
+      <p className="text-[0.9365rem] leading-[25px] text-gray-700 font-medium">
         The ‘Cash on Delivery’ option enables you to pay in cash when our
         delivery courier arrives at your residence. Just make sure your address
         is correct so that your order will not be cancelled.

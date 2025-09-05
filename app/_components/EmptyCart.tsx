@@ -1,10 +1,14 @@
 import Image from "next/image";
-import empty_cart from "@/public/cart/empty-cart.png";
 
-function EmptyCart({ children }) {
+function EmptyCart({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col justify-center  items-center">
-      <Image src={empty_cart} width={100} height={100} alt="empty-cart" />
+      <Image
+        src="/cart/empty-cart.png"
+        width={80}
+        height={80}
+        alt="empty-cart"
+      />
       <h3 className="text-lg text-neutral-charcoal font-bold">
         Your cart is empty!
       </h3>

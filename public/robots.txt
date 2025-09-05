@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://temitayo-audiophile.vercel.app/sitemap.xml

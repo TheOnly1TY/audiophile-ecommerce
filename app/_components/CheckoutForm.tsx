@@ -1,28 +1,97 @@
 "use client";
 
+import emailjs from "@emailjs/browser";
+import { SubmitHandler } from "react-hook-form";
+
 import CashOnDeliveryMessage from "@/app/_ui/CashOnDeliveryMessage";
 import EMoneyForm from "@/app/_components/EMoneyForm";
 import { useCart } from "@/app/_contexts/CartContext";
-import { useCheckoutForm } from "../_contexts/FormContext";
+import { Inputs } from "@/app/_types/Types";
+import { useCheckoutForm } from "@/app/_contexts/FormContext";
+import { SHIPPING_FEE, VAT_FEE } from "@/app/_constants/pricing";
 
 export default function CheckoutForm() {
-  const { addedProducts } = useCart();
+  const { addedProducts, GRANT_PRICE, TotalProductPrice } = useCart();
   const {
     register,
     handleSubmit,
+    reset,
     watch,
+    setIsConfirmationModal,
+    setIsLoading,
+
     formState: { errors },
-    onSubmit,
   } = useCheckoutForm();
+
+  const formattedProducts = `
+  <table style="width: 100%; border-collapse: collapse">
+    ${addedProducts
+      .map(
+        (product) => `
+      <tr style="vertical-align: top">
+        <td style="padding: 24px 8px 0 4px; display: inline-block; width: max-content"></td>
+        <td style="padding: 24px 8px 0 8px; width: 100%">
+          <div>${product.name}</div>
+          <div style="font-size: 14px; color: #888; padding-top: 4px">
+            QTY: ${product.quantity}
+          </div>
+        </td>
+        <td style="padding: 24px 4px 0 0; white-space: nowrap">
+          <strong>$${product.price}</strong>
+        </td>
+      </tr>
+    `
+      )
+      .join("")}
+  </table>
+`;
+  const paymentMethod = watch("paymentMethod");
+  const email = watch("email");
+
+  const templateParams = {
+    order_id: Math.floor(Math.random() * 1000000),
+    email,
+    SHIPPING_FEE,
+    formattedProducts,
+    TotalProductPrice,
+    VAT_FEE,
+    ordered_time: new Date().toLocaleTimeString(),
+    ordered_date: new Date().toLocaleDateString(),
+    GRANT_PRICE,
+  };
+
+  const onSubmit: SubmitHandler<Inputs> = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsConfirmationModal(true);
+      reset();
+    }, 1000);
+
+    emailjs
+      .send(
+        "service_teba1ou",
+        "template_8x8hoah",
+        templateParams,
+        "yWcsmdncBF5CedWNv"
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+        },
+        (error) => {
+          console.log("FAILED...", error);
+        }
+      );
+  };
   const isEmptyCart = addedProducts.length === 0;
 
-  const paymentMethod = watch("paymentMethod");
   return (
     <section className="w-full bg-white rounded-lg p-[1.46875rem] md:p-12">
       <h2 className="text-[2rem] leading-9 tracking-[1.14px] uppercase font-bold">
         Checkout
       </h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} id="checkout-form">
         <div className="mt-6 md:mt-12">
           <h3 className="text-[0.8125rem] text-brand-orange leading-[25px] tracking-[0.93px] font-bold uppercase mb-4">
             billing details
@@ -39,7 +108,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="text"
-                name="name"
                 id="name"
                 {...register("name", { required: "This field is required" })}
                 disabled={isEmptyCart}
@@ -60,7 +128,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="email"
-                name="email"
                 id="email"
                 {...register("email", {
                   required: "This field is required",
@@ -89,7 +156,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="tel"
-                name="tel"
                 id="tel"
                 {...register("tel", {
                   required: "This field is required",
@@ -122,7 +188,6 @@ export default function CheckoutForm() {
           </label>
           <input
             type="text"
-            name="address"
             id="address"
             {...register("address", { required: "This field is required" })}
             disabled={isEmptyCart}
@@ -143,7 +208,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="number"
-                name="zipcode"
                 id="zipcode"
                 {...register("zipcode", { required: "This field is required" })}
                 disabled={isEmptyCart}
@@ -166,7 +230,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="text"
-                name="city"
                 id="city"
                 {...register("city", { required: "This field is required" })}
                 disabled={isEmptyCart}
@@ -187,7 +250,6 @@ export default function CheckoutForm() {
               </label>
               <input
                 type="text"
-                name="country"
                 id="country"
                 {...register("country", { required: "This field is required" })}
                 disabled={isEmptyCart}
@@ -226,8 +288,7 @@ export default function CheckoutForm() {
               >
                 <input
                   type="radio"
-                  name="paymentMethod"
-                  id="paymentMethod"
+                  id="e-money"
                   value="e-Money"
                   {...register("paymentMethod", {
                     required: "Select 1 payment method",
@@ -248,14 +309,13 @@ export default function CheckoutForm() {
               >
                 <input
                   type="radio"
-                  name="paymentMethod"
+                  id="cash-on-delivery"
                   value="cash-on-delivery"
                   {...register("paymentMethod", {
                     required: "Select 1 payment method",
                   })}
                   disabled={isEmptyCart}
                   className="w-5 h-5 accent-brand-orange"
-                  id="paymentMethod"
                 />
                 <p className="text-sm font-bold tracking-[-0.25px]">
                   Cash on Delivery

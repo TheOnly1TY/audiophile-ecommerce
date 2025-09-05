@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useCart } from "@/app/_contexts/CartContext";
 import Button from "@/app/_ui/Button";
 import Counter from "@/app/_ui/Counter";
-import { AddedProductsType } from "../types/Types";
+import { cartProductDataProps } from "@/app/_types/Types";
 
 export default function ProductCartControls({
   cartProductData,
 }: {
-  cartProductData: AddedProductsType[];
+  cartProductData: cartProductDataProps;
 }) {
   const { handleAddProduct } = useCart();
   const [count, setCount] = useState<number>(1);

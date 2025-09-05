@@ -1,2 +1,2 @@
-export const SHIPPING_FEE = 50;
-export const VAT_FEE = 1079;
+export const SHIPPING_FEE: number = 50;
+export const VAT_FEE: number = 1079;

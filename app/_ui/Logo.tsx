@@ -1,8 +1,19 @@
+"use client";
+import { useAnimation } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "@/public/shared/desktop/logo.svg";
+import { motion } from "framer-motion";
 
-export default function Logo({ hidden }: { hidden?: string }) {
+type Controls = ReturnType<typeof useAnimation>;
+export default function Logo({
+  hidden,
+  priority,
+  animation,
+}: {
+  hidden?: string;
+  priority: boolean;
+  animation: Controls | false;
+}) {
   return (
     <Link
       href="/"
@@ -10,7 +21,18 @@ export default function Logo({ hidden }: { hidden?: string }) {
         hidden === "mobile/desktop" && "hidden md:block lg:hidden"
       }`}
     >
-      <Image src={logo} width={143} height={25} alt="logo" />
+      <motion.div
+        initial={animation !== false ? { opacity: 0, x: -20 } : false}
+        animate={animation !== false ? animation : false}
+      >
+        <Image
+          src="/shared/desktop/logo.svg"
+          width={143}
+          height={25}
+          alt="audiophile logo"
+          priority={priority}
+        />
+      </motion.div>
     </Link>
   );
 }

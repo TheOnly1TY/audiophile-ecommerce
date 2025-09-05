@@ -1,12 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import Button from "@/app/_ui/Button";
-import { useCart } from "@/app/_contexts/CartContext";
-import Overlay from "../_ui/Overlay";
-import { useCheckoutForm } from "../_contexts/FormContext";
-import { redirect } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+
+import { useCart } from "@/app/_contexts/CartContext";
+import { useCheckoutForm } from "@/app/_contexts/FormContext";
+import Button from "@/app/_ui/Button";
+import Overlay from "@/app/_ui/Overlay";
+import formatProductName from "@/app/_libs/helpers";
 
 export default function Modal() {
   const { GRANT_PRICE, addedProducts, setAddedProducts } = useCart();
@@ -44,7 +46,7 @@ export default function Modal() {
         <h2 className="text-2xl md:text-[2rem] leading-7 md:leading-9 tracking-[0.86px] md:tracking-[1.14px] max-w-[284px] font-bold uppercase pb-4 md:pb-6">
           Thank you for your order
         </h2>
-        <p className="text-[0.9375rem] leading-[25px] font-bold text-black/50 pb-4 md:pb-6">
+        <p className="text-[0.9375rem] leading-[25px] font-bold text-gray-700 pb-4 md:pb-6">
           You will receive an email confirmation shortly.
         </p>
         <div className="w-full flex flex-col md:flex-row pb-4 md:pb-6">
@@ -62,14 +64,14 @@ export default function Modal() {
                     />
                     <div>
                       <h4 className="text-[0.9375rem] leading-[25px] font-bold uppercase">
-                        xx99 mk ii
+                        {formatProductName(product.name)}
                       </h4>
-                      <p className="text-sm leading-[25px] font-bold text-black/50">
+                      <p className="text-sm leading-[25px] font-bold text-gray-700">
                         ${product.price.toLocaleString()}
                       </p>
                     </div>
                   </div>
-                  <span className="text-[0.9375rem] leading-[25px] text-black/50 font-bold ">
+                  <span className="text-[0.9375rem] leading-[25px] text-gray-700 font-bold ">
                     x{product.quantity}
                   </span>
                 </li>
@@ -79,7 +81,7 @@ export default function Modal() {
               <>
                 <div className="h-[1px] bg-black/50 mx-4 md:mx-6"></div>
                 <span
-                  className="text-xs tracking-[-0.21px] text-center text-black/50 font-bold py-4 cursor-pointer"
+                  className="text-xs tracking-[-0.21px] text-center text-gray-700 font-bold py-4 cursor-pointer"
                   onClick={() => setIsExpanded((prev) => !prev)}
                 >
                   {!isExpanded

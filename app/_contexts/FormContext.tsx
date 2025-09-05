@@ -1,13 +1,16 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
-import { Inputs } from "../types/Types";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { Inputs } from "@/app/_types/Types";
+
 const FormContext = createContext<contextFormType | null>(null);
 
 type contextFormType = UseFormReturn<Inputs> & {
-  onSubmit: SubmitHandler<Inputs>;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isConfirmationModal: boolean;
+  setIsConfirmationModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function FormProviderCustom({ children }: { children: React.ReactNode }) {
@@ -17,23 +20,15 @@ function FormProviderCustom({ children }: { children: React.ReactNode }) {
   const methods = useForm<Inputs>();
   const { reset } = methods;
 
-  const onSubmit: SubmitHandler<Inputs> = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      reset();
-      setIsConfirmationModal(true);
-    }, 1000);
-  };
-
   return (
     <FormContext.Provider
       value={{
         ...methods,
-        onSubmit,
-        isLoading,
+        reset,
         isConfirmationModal,
         setIsConfirmationModal,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

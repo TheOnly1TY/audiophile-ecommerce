@@ -1,10 +1,11 @@
 "use client";
 
-import Button from "../_ui/Button";
-import { useCart } from "@/app/_contexts/CartContext";
-import EmptyCart from "./EmptyCart";
-import SummaryProducts from "./SummaryProducts";
 import Link from "next/link";
+
+import Button from "@/app/_ui/Button";
+import { useCart } from "@/app/_contexts/CartContext";
+import EmptyCart from "@/app/_components/EmptyCart";
+import SummaryProducts from "@/app/_components/SummaryProducts";
 
 export default function Summary() {
   const { addedProducts } = useCart();

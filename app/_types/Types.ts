@@ -17,16 +17,59 @@ export type CartContextType = {
   handleDeleteProducts: () => void;
 };
 
+export type Product = {
+  id: number;
+  slug: string;
+  name: string;
+  image: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+  };
+  category: string;
+  categoryImage: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+  };
+  new: boolean;
+  price: number;
+  description: string;
+  features: string;
+  includes: { quantity: number; item: string }[];
+  gallery: {
+    first: { mobile: string; tablet: string; desktop: string };
+    second: { mobile: string; tablet: string; desktop: string };
+    third: { mobile: string; tablet: string; desktop: string };
+  };
+  others: {
+    slug: string;
+    name: string;
+    image: { mobile: string; tablet: string; desktop: string };
+  }[];
+};
+
 export type ButtonProps = {
   variant?: "primary" | "secondary" | "tertiary";
+  form?: string;
+  type?: "button" | "submit" | "reset";
   width?: number | string;
   children: React.ReactNode;
   action?: () => void;
 };
 
+export type navLinksType = {
+  label: string;
+  href?: string;
+};
+
 export interface cartProductDataProps {
   id: number;
-  thumbnail: string;
+  image: {
+    desktop: string;
+    tablet: string;
+    mobile: string;
+  };
   name: string;
   price: number;
 }
@@ -43,8 +86,8 @@ export type CounterProps = {
 };
 
 export type OverlayProps = {
-  isHidden: boolean;
-  action: () => void;
+  isHidden?: boolean;
+  action?: () => void;
   index?: string;
 };
 
@@ -64,4 +107,12 @@ export type Inputs = {
   eMoneyNumber: number;
   paymentMethod: string;
   eMoneyPin: number;
+};
+
+export type GalleryProps = {
+  gallery: {
+    first: { mobile: string; tablet: string; desktop: string };
+    second: { mobile: string; tablet: string; desktop: string };
+    third: { mobile: string; tablet: string; desktop: string };
+  };
 };
